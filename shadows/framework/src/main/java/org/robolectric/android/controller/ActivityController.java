@@ -132,13 +132,10 @@ public class ActivityController<T extends Activity> extends ComponentController<
       }
     });
 
-    ViewRootImpl root = component.getWindow().getDecorView().getViewRootImpl();
-    if (root != null) {
-      // If a test pause thread before creating an activity, root will be null as runPaused is waiting
-      // Related to issue #1582
-      ((ShadowViewRootImpl) extract(root)).callDispatchResized();
-    }
+    shadowMainLooper.idle();
 
+    ViewRootImpl root = component.getWindow().getDecorView().getViewRootImpl();
+    ((ShadowViewRootImpl) extract(root)).callDispatchResized();
     return this;
   }
 
